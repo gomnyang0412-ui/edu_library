@@ -182,8 +182,7 @@ export default function HomePage() {
     if (!file || !title.trim()) { flash('파일과 제목을 확인해 주세요.'); return; }
     setWorking(true);
     const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
-    const safeName = file.name.replace(/[^a-zA-Z0-9가-힣._-]/g, '_');
-    const storagePath = `${crypto.randomUUID()}/${safeName}`;
+    const storagePath = `${crypto.randomUUID()}/document.${extension}`;
     const mimeType = fallbackMimes[extension] || file.type || 'application/octet-stream';
     const fileBody = await file.arrayBuffer();
     const upload = await supabase.storage.from(STORAGE_BUCKET).upload(storagePath, fileBody, { contentType: mimeType, upsert: false });
@@ -264,7 +263,7 @@ export default function HomePage() {
     let fileSize = detail.file_size;
     if (file) {
       const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
-      const nextPath = `${detail.id}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9가-힣._-]/g, '_')}`;
+      const nextPath = `${detail.id}/${crypto.randomUUID()}/document.${extension}`;
       const nextMimeType = fallbackMimes[extension] || file.type || 'application/octet-stream';
       const fileBody = await file.arrayBuffer();
       const upload = await supabase.storage.from(STORAGE_BUCKET).upload(nextPath, fileBody, { contentType: nextMimeType });
