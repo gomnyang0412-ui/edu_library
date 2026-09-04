@@ -184,7 +184,7 @@ export default function HomePage() {
     const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
     const safeName = file.name.replace(/[^a-zA-Z0-9가-힣._-]/g, '_');
     const storagePath = `${crypto.randomUUID()}/${safeName}`;
-    const mimeType = file.type || fallbackMimes[extension] || 'application/octet-stream';
+    const mimeType = fallbackMimes[extension] || file.type || 'application/octet-stream';
     const upload = await supabase.storage.from(STORAGE_BUCKET).upload(storagePath, file, { contentType: mimeType, upsert: false });
     if (upload.error) {
       flash(`업로드하지 못했어요: ${upload.error.message}`);
@@ -264,9 +264,10 @@ export default function HomePage() {
     if (file) {
       const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
       const nextPath = `${detail.id}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9가-힣._-]/g, '_')}`;
-      const upload = await supabase.storage.from(STORAGE_BUCKET).upload(nextPath, file, { contentType: file.type || fallbackMimes[extension] });
+      const nextMimeType = fallbackMimes[extension] || file.type || 'application/octet-stream';
+      const upload = await supabase.storage.from(STORAGE_BUCKET).upload(nextPath, file, { contentType: nextMimeType });
       if (upload.error) { flash('새 파일을 올리지 못했어요.'); setWorking(false); return; }
-      storagePath = nextPath; originalFilename = file.name; mimeType = file.type || fallbackMimes[extension]; fileSize = file.size;
+      storagePath = nextPath; originalFilename = file.name; mimeType = nextMimeType; fileSize = file.size;
     }
     const updated = await supabase.from('documents').update({
       title: title.trim(), description: description.trim() || null, tags,
