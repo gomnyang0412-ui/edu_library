@@ -185,7 +185,8 @@ export default function HomePage() {
     const safeName = file.name.replace(/[^a-zA-Z0-9가-힣._-]/g, '_');
     const storagePath = `${crypto.randomUUID()}/${safeName}`;
     const mimeType = fallbackMimes[extension] || file.type || 'application/octet-stream';
-    const upload = await supabase.storage.from(STORAGE_BUCKET).upload(storagePath, file, { contentType: mimeType, upsert: false });
+    const fileBody = await file.arrayBuffer();
+    const upload = await supabase.storage.from(STORAGE_BUCKET).upload(storagePath, fileBody, { contentType: mimeType, upsert: false });
     if (upload.error) {
       flash(`업로드하지 못했어요: ${upload.error.message}`);
     } else {
@@ -265,7 +266,8 @@ export default function HomePage() {
       const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
       const nextPath = `${detail.id}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9가-힣._-]/g, '_')}`;
       const nextMimeType = fallbackMimes[extension] || file.type || 'application/octet-stream';
-      const upload = await supabase.storage.from(STORAGE_BUCKET).upload(nextPath, file, { contentType: nextMimeType });
+      const fileBody = await file.arrayBuffer();
+      const upload = await supabase.storage.from(STORAGE_BUCKET).upload(nextPath, fileBody, { contentType: nextMimeType });
       if (upload.error) { flash('새 파일을 올리지 못했어요.'); setWorking(false); return; }
       storagePath = nextPath; originalFilename = file.name; mimeType = nextMimeType; fileSize = file.size;
     }
