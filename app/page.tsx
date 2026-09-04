@@ -321,16 +321,19 @@ export default function HomePage() {
     <div className="app-shell">
       {message && <output className="toast-message">{message}</output>}
       <aside className="sidebar">
-        <button className="brand brand-button" onClick={() => { setActive('전체 자료'); setSearched(false); }}><span className="brand-mark"><BookOpen /></span><span>흥덕 업무함</span></button>
+        <button className="brand brand-button" onClick={() => { setActive('전체 자료'); setSearched(false); }}><span className="brand-mark"><BookOpen /></span><span className="brand-copy"><span>흥덕 업무함</span></span></button>
         <nav className="side-nav" aria-label="자료 보기">{navigation.map(({ label, icon: Icon }) => <button key={label} className={active === label ? 'active' : ''} onClick={() => { setActive(label); setSearched(true); }}><Icon />{label}</button>)}</nav>
         <div className="side-section-label">카테고리</div>
         <nav className="side-nav categories" aria-label="카테고리">{visibleCategories.map((category) => <button key={category.id} className={active === category.name ? 'active' : ''} onClick={() => { setActive(category.name); setSearched(true); }}><Folder />{category.name}</button>)}</nav>
-        <button className="category-settings" onClick={() => requireAdmin(() => setManageOpen(true))}><Settings /> 카테고리 관리</button>
-        {isAdmin && <button className="category-settings logout-button" onClick={logout}><LogOut /> 로그아웃</button>}
+        <div className="sidebar-footer">
+          <button className="category-settings" onClick={() => requireAdmin(() => setManageOpen(true))}><Settings /> 카테고리 관리</button>
+          {isAdmin && <button className="category-settings logout-button" onClick={logout}><LogOut /> 로그아웃</button>}
+          <div className="creator-credit"><span>기획·제작</span><strong>흥덕고등학교 신은수 교사</strong></div>
+        </div>
       </aside>
 
       <main className="main-content">
-        <header className="mobile-header"><button className="brand brand-button" onClick={() => { setActive('전체 자료'); setSearched(false); }}><span className="brand-mark"><BookOpen /></span><span>흥덕 업무함</span></button><button className="icon-button" aria-label="메뉴 열기" onClick={() => setCategoryOpen(true)}><Menu /></button></header>
+        <header className="mobile-header"><button className="brand brand-button" onClick={() => { setActive('전체 자료'); setSearched(false); }}><span className="brand-mark"><BookOpen /></span><span className="brand-copy"><span>흥덕 업무함</span><small>신은수 교사 기획·제작</small></span></button><button className="icon-button" aria-label="메뉴 열기" onClick={() => setCategoryOpen(true)}><Menu /></button></header>
         <div className={showResults ? 'content results-mode' : 'content'}>
           <section className="search-section">
             {!showResults && <div className="eyebrow"><Sparkles /> 필요한 자료를 빠르게 찾아요</div>}
