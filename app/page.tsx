@@ -362,7 +362,7 @@ export default function HomePage() {
 
       <nav className="bottom-nav" aria-label="모바일 메뉴"><button onClick={() => { setActive('전체 자료'); setSearched(false); }} className={active === '전체 자료' ? 'active' : ''}><Home />홈</button><button onClick={() => { setActive('최근 자료'); setSearched(true); }} className={active === '최근 자료' ? 'active' : ''}><Clock3 />최근</button><button className="add-mobile" onClick={() => setUploadOpen(true)} aria-label="자료 추가"><Plus /></button><button onClick={() => { setActive('즐겨찾기'); setSearched(true); }} className={active === '즐겨찾기' ? 'active' : ''}><Star />즐겨찾기</button><button onClick={() => setCategoryOpen(true)}><Folder />카테고리</button></nav>
 
-      <Dialog open={uploadOpen} onOpenChange={(open) => { setUploadOpen(open); if (!open) resetUpload(); }}><DialogContent className="upload-dialog"><DialogHeader><DialogTitle>새 자료를 추가해요</DialogTitle><DialogDescription>PDF, 문서, 프레젠테이션, 이미지 파일을 올릴 수 있어요.</DialogDescription></DialogHeader>
+      <Dialog disablePointerDismissal open={uploadOpen} onOpenChange={(open) => { setUploadOpen(open); if (!open) resetUpload(); }}><DialogContent className="upload-dialog"><DialogHeader><DialogTitle>새 자료를 추가해요</DialogTitle><DialogDescription>PDF, 문서, 프레젠테이션, 이미지 파일을 올릴 수 있어요.</DialogDescription></DialogHeader>
         <label className="drop-zone"><Upload /><strong>{file ? file.name : '파일을 선택해 주세요'}</strong><span>{file ? readableSize(file.size) : '또는 이곳에 끌어다 놓으세요 · 최대 50MB'}</span><input type="file" accept=".pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png" onChange={(event) => selectUploadFile(event.target.files?.[0] ?? null)} /></label>
         <div className="field-label"><label htmlFor="upload-title">제목</label><Input id="upload-title" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="파일을 고르면 제목이 자동으로 들어가요" /></div>
         <div className="field-label">카테고리<div className="choice-row">{categories.map((item) => <button type="button" className={categoryIds.includes(item.id) ? 'selected' : ''} key={item.id} onClick={() => toggleCategory(item.id)}>{item.name}</button>)}</div></div>
@@ -371,12 +371,12 @@ export default function HomePage() {
         <Button className="primary-large" disabled={working} onClick={() => void uploadDocument()}>{working ? <LoaderCircle className="spin" /> : null}자료 추가하기</Button>
       </DialogContent></Dialog>
 
-      <Dialog open={loginOpen} onOpenChange={setLoginOpen}><DialogContent className="login-dialog"><div className="login-icon"><LogIn /></div><DialogHeader><DialogTitle>관리자 로그인이 필요해요</DialogTitle><DialogDescription>자료 수정·삭제와 카테고리 관리는 관리자만 할 수 있어요.</DialogDescription></DialogHeader>
+      <Dialog disablePointerDismissal open={loginOpen} onOpenChange={setLoginOpen}><DialogContent className="login-dialog"><div className="login-icon"><LogIn /></div><DialogHeader><DialogTitle>관리자 로그인이 필요해요</DialogTitle><DialogDescription>자료 수정·삭제와 카테고리 관리는 관리자만 할 수 있어요.</DialogDescription></DialogHeader>
         <div className="field-label"><label htmlFor="admin-email">이메일</label><Input id="admin-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="teacher@school.kr" /></div><div className="field-label"><label htmlFor="admin-password">비밀번호</label><Input id="admin-password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="비밀번호를 입력해 주세요" /></div>
         <Button className="primary-large" disabled={working} onClick={() => void login()}>{working ? <LoaderCircle className="spin" /> : null}로그인</Button>
       </DialogContent></Dialog>
 
-      <Dialog open={editOpen} onOpenChange={setEditOpen}><DialogContent className="upload-dialog"><DialogHeader><DialogTitle>자료를 수정해요</DialogTitle><DialogDescription>자료 정보나 실제 파일을 바꿀 수 있어요.</DialogDescription></DialogHeader>
+      <Dialog disablePointerDismissal open={editOpen} onOpenChange={setEditOpen}><DialogContent className="upload-dialog"><DialogHeader><DialogTitle>자료를 수정해요</DialogTitle><DialogDescription>자료 정보나 실제 파일을 바꿀 수 있어요.</DialogDescription></DialogHeader>
         <label className="drop-zone compact"><Upload /><strong>{file ? file.name : `현재 파일: ${detail?.original_filename ?? ''}`}</strong><span>눌러서 새 파일로 교체할 수 있어요</span><input type="file" accept=".pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png" onChange={(event) => selectUploadFile(event.target.files?.[0] ?? null)} /></label>
         <div className="field-label"><label htmlFor="edit-title">제목</label><Input id="edit-title" value={title} onChange={(event) => setTitle(event.target.value)} /></div>
         <div className="field-label">카테고리<div className="choice-row">{categories.map((item) => <button type="button" className={categoryIds.includes(item.id) ? 'selected' : ''} key={item.id} onClick={() => toggleCategory(item.id)}>{item.name}</button>)}</div></div>
@@ -385,7 +385,7 @@ export default function HomePage() {
         <Button className="primary-large" disabled={working} onClick={() => void saveEdit()}>수정 내용 저장하기</Button>
       </DialogContent></Dialog>
 
-      <Dialog open={manageOpen} onOpenChange={setManageOpen}><DialogContent className="upload-dialog category-dialog"><DialogHeader><DialogTitle>카테고리를 관리해요</DialogTitle><DialogDescription>이름을 바꾸거나 삭제해도 자료 파일은 그대로 유지돼요.</DialogDescription></DialogHeader>
+      <Dialog disablePointerDismissal open={manageOpen} onOpenChange={setManageOpen}><DialogContent className="upload-dialog category-dialog"><DialogHeader><DialogTitle>카테고리를 관리해요</DialogTitle><DialogDescription>이름을 바꾸거나 삭제해도 자료 파일은 그대로 유지돼요.</DialogDescription></DialogHeader>
         <div className="add-category"><Input value={newCategory} onChange={(event) => setNewCategory(event.target.value)} placeholder="새 카테고리 이름" /><Button onClick={() => void addCategory()}><Plus />추가</Button></div>
         <div className="manage-list">{categories.map((category) => <div key={category.id}><span><Folder />{category.name}</span><div><Button variant="ghost" size="icon" aria-label="이름 변경" onClick={() => void renameCategory(category)}><Pencil /></Button><Button variant="ghost" size="icon" aria-label="삭제" onClick={() => void deleteCategory(category)}><Trash2 /></Button></div></div>)}</div>
       </DialogContent></Dialog>
